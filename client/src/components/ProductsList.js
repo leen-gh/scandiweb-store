@@ -10,7 +10,7 @@ const ProductList = ({ category, addTocart }) => {
     skip: !category,
   });
 
-  if (!category) return <p className="p-4">Select a category</p>;
+  if (!category) return <h3 className="p-4">Select a category</h3>;
   if (loading) return <p className="p-4">Loading products...</p>;
   if (error) {
     console.error('Product query error:', error);

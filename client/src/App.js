@@ -8,7 +8,7 @@ import useCart from './hooks/useCart';
 
 
 function App() {
-  const pathCategory = window.location.pathname.split("/")[1] || "all";
+  const pathCategory = window.location.pathname.split("/")[1] || "null";
   const [selectedCategory, setSelectedCategory] = useState(pathCategory);
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -26,6 +26,7 @@ function App() {
         onCategoryChange={setSelectedCategory}
         onCartToggle={() => {setCartOpen(prev => !prev);}}
         cartItems={cartItems}
+        category={selectedCategory}
       />
 
       <CartOverlay

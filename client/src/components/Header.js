@@ -4,15 +4,13 @@ import { GET_CATEGORIES } from '../graphQl/queries';
 import logo from '../Images/logo.png';
 import { Link } from 'react-router-dom';
 
-export default function Header({ onCategoryChange, cartItems = [], onCartToggle }) {
+export default function Header({ onCategoryChange, cartItems = [], onCartToggle , category}) {
   const { loading, error, data } = useQuery(GET_CATEGORIES);
   
-  const pathCategory = window.location.pathname.split("/")[1] || "all";
-  const [activeCategory, setActiveCategory] = useState(pathCategory);
 
   useEffect(() => {
-  console.log("activeCategory:", activeCategory);
-  }, [activeCategory]);
+  console.log("activeCategory:", category);
+  }, [category]);
 
   if (loading) return <p>Loading...</p>;
   if (error) {
@@ -23,7 +21,6 @@ export default function Header({ onCategoryChange, cartItems = [], onCartToggle 
   const totalQuantity = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   const handleClick = (name) => {
-    setActiveCategory(name);
     onCategoryChange(name);
   };
 
@@ -33,13 +30,13 @@ export default function Header({ onCategoryChange, cartItems = [], onCartToggle 
         {data.categories?.map(({ name }) => (
           <Link
           to={`/${name.toLowerCase()}`}
-          data-testid={activeCategory === name ? 'active-category-link' : 'category-link'}
+          data-testid={category === name ? 'active-category-link' : 'category-link'}
           key={name}
           onClick={(e) => {
             handleClick(name);
           }}
           className={`uppercase px-4 py-2 rounded text-gray-700 
-            ${activeCategory === name ? 'border-b-4 border-green-400' : 'bg-white hover:bg-green-100'}`}
+            ${category === name ? 'border-b-4 border-green-400' : 'bg-white hover:bg-green-100'}`}
         >
           {name}
         </Link>
