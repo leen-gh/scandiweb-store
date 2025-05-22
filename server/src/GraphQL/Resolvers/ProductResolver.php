@@ -17,20 +17,7 @@ class ProductResolver
         } catch (\Throwable $e) {
             return [['id' => 0, 'name' => 'DB Error: ' . $e->getMessage()]];
         }
-    }/*
-    public static function GetProductById($id): array
-    {
-        try {
-            $pdo = Database::connect();
-            $stmt = $pdo->prepare("SELECT id, name, brand, description, in_stock, category FROM products WHERE id = :id");
-            $stmt->execute(['id' => $id]);
-            $result = $stmt->fetch(\PDO::FETCH_ASSOC);
-
-            return $result ?: [];
-        } catch (\Throwable $e) {
-            return [['id' => 0, 'name' => 'DB Error: ' . $e->getMessage()]];
-        }
-    }*/
+    }
 
    
 
@@ -114,25 +101,21 @@ class ProductResolver
         try {
             $pdo = Database::connect();
 
-            // Get main product data
             $stmt = $pdo->prepare("SELECT id, name, brand, description, in_stock, category FROM products WHERE id = ?");
             $stmt->execute([$id]);
             $product = $stmt->fetch(\PDO::FETCH_ASSOC);
 
             if (!$product) return null;
 
-            // Get gallery
             $stmt = $pdo->prepare("SELECT image_url FROM product_gallery WHERE product_id = ?");
             $stmt->execute([$id]);
             $product['gallery'] = array_column($stmt->fetchAll(\PDO::FETCH_ASSOC), 'image_url');
 
-            // Get prices
             $stmt = $pdo->prepare("SELECT amount FROM prices WHERE product_id = ? LIMIT 1");
             $stmt->execute([$id]);
             $priceRow = $stmt->fetch(\PDO::FETCH_ASSOC);
             $product['price'] = $priceRow ? floatval($priceRow['amount']) : null;
 
-            // Get attributes
             $stmt = $pdo->prepare("SELECT DISTINCT attribute_name FROM attributes WHERE product_id = ?");
             $stmt->execute([$id]);
             $attributeNames = $stmt->fetchAll(\PDO::FETCH_COLUMN);

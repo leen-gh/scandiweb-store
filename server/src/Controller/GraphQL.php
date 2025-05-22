@@ -14,6 +14,9 @@ use App\GraphQL\Types\CategoryType;
 use App\GraphQL\Types\ProductType;
 use App\GraphQL\Resolvers\CategoryResolver;
 use App\GraphQL\Resolvers\ProductResolver;
+use App\GraphQL\Resolvers\OrderResolver;
+use App\GraphQL\Types\OrderType;
+use App\GraphQL\Types\OrderItemInputType;
 
 
 class GraphQL {
@@ -50,6 +53,23 @@ class GraphQL {
                     ],
 
 
+                ],
+            ]);
+
+            $orderType = new OrderType();
+            $orderItemInputType = new OrderItemInputType();
+
+            $mutationType = new ObjectType([
+                'name' => 'Mutation',
+                'fields' => [
+                    'placeOrder' => [
+                        'type' => $orderType,
+                        'args' => [
+                            'items' => Type::nonNull(Type::listOf($orderItemInputType)),
+                            'totalPrice' => Type::nonNull(Type::float())
+                        ],
+                        'resolve' => fn ($root, $args) => OrderResolver::place($args),
+                    ]
                 ],
             ]);
             

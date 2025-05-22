@@ -45,6 +45,12 @@ export default function SingleProduct({ addTocart, openCart  }) {
   };
 
   const allSelected = product?.attributes?.every(attr => selectedAttributes[attr.name]);
+  const inStock = product?.in_stock;
+  const dis_btn = (allSelected && inStock)
+
+
+
+
 
   if (loading) return <p className="p-4">Loading product...</p>;
   if (error || !product) return <p className="p-4 text-red-500">Product not found.</p>;
@@ -53,7 +59,6 @@ export default function SingleProduct({ addTocart, openCart  }) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-7 gap-8 p-6">
       
-      {/* Side Gallery */}
       <div className="flex flex-col gap-2" data-testid="product-gallery">
         {product.gallery.map((img, idx) => (
           <img
@@ -66,16 +71,13 @@ export default function SingleProduct({ addTocart, openCart  }) {
         ))}
       </div>
 
-      {/* Main Image */}
       <div className="col-span-3">
         <img src={mainImage} alt="main" className="w-full max-h-[500px] object-contain" />
       </div>
 
-      {/* Product Details */}
       <div className="col-span-2">
         <h1 className="text-2xl font-bold my-4">{product.name}</h1>
 
-        {/* Attributes */}
         {product.attributes?.map((attr) => (
           <div key={attr.name} className="mb-4" data-testid={`product-attribute-${attr.name.toLowerCase().replace(/\s+/g, '-')}`}>
             <h2 className="font-semibold text-lg mb-2">{attr.name}</h2>
@@ -101,23 +103,20 @@ export default function SingleProduct({ addTocart, openCart  }) {
           </div>
         ))}
 
-        {/* Price */}
         <div className="my-4">
           <h3 className="text-lg font-semibold">Price:</h3>
           <p className="text-xl font-bold">${product.price.toFixed(2)}</p>
         </div>
 
-        {/* Add to Cart Button */}
         <button
           onClick={handleAddToCart}
           data-testid="add-to-cart"
-          disabled={!allSelected}
+          disabled={!dis_btn}
           className="w-full px-6 py-3 bg-green-400 text-white rounded hover:bg-green-500 disabled:bg-gray-400 transition"
         >
           Add to Cart
         </button>
 
-        {/* Description */}
         <div className="mt-6 prose" data-testid="product-description">
           {product.description ? parse(product.description) : 'No description.'}
         </div>

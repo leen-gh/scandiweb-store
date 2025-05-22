@@ -35,9 +35,14 @@ export default function ProductCard({ product, addTocart }) {
               <span className="text-xl text-gray-700 font-semibold">OUT OF STOCK</span>
             </div>
           )}
-          {in_stock && (
+          
+        </div>
+      </Link>
+
+      <div className="p-2">
+        {in_stock && (
             <div
-              className="absolute bottom-4 right-4 bg-green-500 p-2 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
+              className="absolute bottom-16 right-4 bg-green-500 p-2 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
               onClick={() => addTocart(newItem)}
             >
               <svg
@@ -56,10 +61,6 @@ export default function ProductCard({ product, addTocart }) {
               </svg>
             </div>
           )}
-        </div>
-      </Link>
-
-      <div className="p-2">
         <h3 className="text-sm text-gray-700">{name}</h3>
         <p className="text-base font-medium">${price}</p>
       </div>

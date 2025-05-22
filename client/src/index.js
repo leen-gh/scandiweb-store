@@ -9,8 +9,6 @@ import {
 import './index.css';
 import App from './App';
 
-//https://scandiweb-store.great-site.net/sweb-backend/public/graphql
-//http://localhost/sweb-backend/public/graphql
 
 const httpLink = new HttpLink({
   uri: 'https://scandiweb-store.great-site.net/sweb-backend/public/graphql',

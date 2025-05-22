@@ -1,16 +1,36 @@
 import React from 'react';
+import { useMutation } from '@apollo/client';
+import { PLACE_ORDER } from '../graphQl/queries';
+
 
 export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuantity, increaseQuantity, clearCart }) {
   const total = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
 
-  const handlePlaceOrder = () => {
-    console.log("Order placed!");
-    localStorage.removeItem("cartItems");
-    clearCart();
-    onClose();
-    alert("Order placed successfully!");
+  const [placeOrder] = useMutation(PLACE_ORDER);
+
+  const handlePlaceOrder = async () => {
+    try {
+      const { data } = await placeOrder({
+        variables: {
+          items: cartItems.map(item => ({
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity,
+            selectedAttributes: JSON.stringify(item.selectedAttributes),
+          })),
+          totalPrice: total,
+        },
+      });
+
+      localStorage.removeItem('cartItems');
+      clearCart();
+      onClose();
+      alert('Order placed successfully!');
+    } catch (error) {
+      alert('Order failed. Please try again.');
+    }
   };
 
   return (

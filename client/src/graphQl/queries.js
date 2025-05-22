@@ -41,6 +41,16 @@ export const GetProductById = gql`
 }
 `;
 
+export const PLACE_ORDER = gql`
+  mutation PlaceOrder($items: [OrderItemInput!]!, $totalPrice: Float!) {
+    placeOrder(items: $items, totalPrice: $totalPrice) {
+      id
+      total_price
+      created_at
+    }
+  }
+`;
+
 
 
 

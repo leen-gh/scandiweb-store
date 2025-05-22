@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import ProductList from './components/ProductsList';
 import CartOverlay from './components/CartOverlay';
@@ -8,7 +8,7 @@ import useCart from './hooks/useCart';
 
 
 function App() {
-  const pathCategory = window.location.pathname.split("/")[1] || "null";
+  const pathCategory = window.location.pathname.split("/")[1] || "all";
   const [selectedCategory, setSelectedCategory] = useState(pathCategory);
   const [cartOpen, setCartOpen] = useState(false);
 
@@ -40,6 +40,7 @@ function App() {
 
       <main className="p-6">
         <Routes>
+          <Route path="/" element={<Navigate to="/all" replace />} />
           <Route
             path="/:category"
             element={

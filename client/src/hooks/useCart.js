@@ -13,20 +13,32 @@ const useCart = () => {
   }, [cartItems]);
 
   const addToCart = (newItem) => {
-    setCartItems((prevItems) => {
-      const existingIndex = prevItems.findIndex(item => item.name === newItem.name);
-      if (existingIndex !== -1) {
-        const updatedItems = [...prevItems];
-        updatedItems[existingIndex] = {
-          ...updatedItems[existingIndex],
-          quantity: updatedItems[existingIndex].quantity + 1
-        };
-        return updatedItems;
-      } else {
-        return [...prevItems, { ...newItem, quantity: 1 }];
-      }
+  setCartItems((prevItems) => {
+    const existingIndex = prevItems.findIndex((item) => {
+      if (item.name !== newItem.name) return false;
+
+      const existingAttributes = item.selectedAttributes;
+      const newAttributes = newItem.selectedAttributes;
+      const allKeys = Object.keys(existingAttributes);
+
+      return allKeys.every(
+        key => existingAttributes[key] === newAttributes[key]
+      );
     });
-  };
+
+    if (existingIndex !== -1) {
+      const updatedItems = [...prevItems];
+      updatedItems[existingIndex] = {
+        ...updatedItems[existingIndex],
+        quantity: updatedItems[existingIndex].quantity + 1
+      };
+      return updatedItems;
+    } else {
+      return [...prevItems, { ...newItem, quantity: 1 }];
+    }
+  });
+};
+
 
   const increaseQuantity = (index) => {
     const updated = [...cartItems];

@@ -13,7 +13,6 @@ const ProductList = ({ category, addTocart }) => {
   if (!category) return <h3 className="p-4">Select a category</h3>;
   if (loading) return <p className="p-4">Loading products...</p>;
   if (error) {
-    console.error('Product query error:', error);
     return <p className="p-4 text-red-500">Error loading products</p>;
   }
 

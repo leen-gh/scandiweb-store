@@ -8,13 +8,8 @@ export default function Header({ onCategoryChange, cartItems = [], onCartToggle 
   const { loading, error, data } = useQuery(GET_CATEGORIES);
   
 
-  useEffect(() => {
-  console.log("activeCategory:", category);
-  }, [category]);
-
   if (loading) return <p>Loading...</p>;
   if (error) {
-    console.error('GraphQL Error:', error);
     return <p>Error Loading Categories</p>
   }
 
