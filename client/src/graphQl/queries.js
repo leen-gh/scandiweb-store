@@ -17,7 +17,10 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
       in_stock
       price
       gallery
-      
+      attributes {
+        name
+        options
+      }
     }
   }
 `;

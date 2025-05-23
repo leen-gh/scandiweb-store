@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_CATEGORIES } from '../graphQl/queries';
 import logo from '../Images/logo.png';

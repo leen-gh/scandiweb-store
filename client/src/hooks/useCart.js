@@ -20,6 +20,9 @@ const useCart = () => {
       const existingAttributes = item.selectedAttributes;
       const newAttributes = newItem.selectedAttributes;
       const allKeys = Object.keys(existingAttributes);
+      
+      if (allKeys.length !== Object.keys(newAttributes).length) return false;
+
 
       return allKeys.every(
         key => existingAttributes[key] === newAttributes[key]
@@ -38,6 +41,23 @@ const useCart = () => {
     }
   });
 };
+
+  const updateAttribute = (index, attrName, value) => {
+    setCartItems(prevItems => {
+      const updated = [...prevItems];
+      const item = updated[index];
+
+      updated[index] = {
+        ...item,
+        selectedAttributes: {
+          ...item.selectedAttributes,
+          [attrName]: value
+        }
+      };
+
+      return updated;
+    });
+  };
 
 
   const increaseQuantity = (index) => {
@@ -66,7 +86,8 @@ const useCart = () => {
     addToCart,
     increaseQuantity,
     decreaseQuantity,
-    clearCart
+    clearCart,
+    updateAttribute
   };
 };
 

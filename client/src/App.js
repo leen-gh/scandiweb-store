@@ -17,7 +17,8 @@ function App() {
     addToCart,
     increaseQuantity,
     decreaseQuantity,
-    clearCart
+    clearCart,
+    updateAttribute
   } = useCart();
 
   return (
@@ -36,6 +37,8 @@ function App() {
         decreaseQuantity={decreaseQuantity}
         increaseQuantity={increaseQuantity}
         clearCart={clearCart}
+        updateAttribute={updateAttribute}
+
       />
 
       <main className="p-6">

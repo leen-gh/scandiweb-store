@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { PLACE_ORDER } from '../graphQl/queries';
 
 
-export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuantity, increaseQuantity, clearCart }) {
+export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuantity, increaseQuantity, clearCart, updateAttribute }) {
   const total = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
@@ -24,11 +24,13 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
         },
       });
 
+      console.log('Order placed:', data.placeOrder);
       localStorage.removeItem('cartItems');
       clearCart();
       onClose();
       alert('Order placed successfully!');
     } catch (error) {
+      console.error('Order failed:', error);
       alert('Order failed. Please try again.');
     }
   };
@@ -51,12 +53,7 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 text-gray-600 hover:text-black"
-        >
-          ✕
-        </button>
+
 
         <h2 className="text-xl font-bold mb-4">My Bag: <span className="font-light text-lg">{cartItems.length} Items</span></h2>
 
@@ -78,19 +75,19 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
                           {attr.options.map((option, i) => {
                             const optionValue = option.toLowerCase().replace(/\s+/g, '-');
                             const isSelected = item.selectedAttributes[attr.name] === option;
-                            return (
-                              <button
-                                key={option}
-                                disabled
-                                className={`border rounded ${
-                                  isSelected ? 'border-2 border-green-400' : 'border-gray-300'
-                                } ${attr.name.toLowerCase() === 'color' ? 'px-4 py-4' : 'p-1'}`}
-                                style={attr.name.toLowerCase() === 'color' ? { backgroundColor: option } : {}}
-                                data-testid={`cart-item-attribute-${attrName}-${optionValue}${isSelected ? '-selected' : ''}`}
-                              >
-                                {attr.name.toLowerCase() === 'color' ? '' : option}
-                              </button>
-                            );
+                              return (
+                                <button
+                                  key={option}
+                                  onClick={() => updateAttribute(index, attr.name, option)}
+                                  className={`border rounded transition ${
+                                    isSelected ? 'border-2 border-green-400' : 'border-gray-300'
+                                  } ${attr.name.toLowerCase() === 'color' ? 'px-4 py-4' : 'p-1'}`}
+                                  style={attr.name.toLowerCase() === 'color' ? { backgroundColor: option } : {}}
+                                  data-testid={`cart-item-attribute-${attrName}-${optionValue}${isSelected ? '-selected' : ''}`}
+                                >
+                                  {attr.name.toLowerCase() === 'color' ? '' : option}
+                                </button>
+                              );
                           })}
                         </div>
                       </div>
