@@ -3,7 +3,7 @@ import { useMutation } from '@apollo/client';
 import { PLACE_ORDER } from '../graphQl/queries';
 
 
-export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuantity, increaseQuantity, clearCart, updateAttribute }) {
+export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuantity, increaseQuantity, clearCart}) {
   const total = cartItems.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
@@ -76,9 +76,8 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
                             const optionValue = option.toLowerCase().replace(/\s+/g, '-');
                             const isSelected = item.selectedAttributes[attr.name] === option;
                               return (
-                                <button
+                                <span
                                   key={option}
-                                  onClick={() => updateAttribute(index, attr.name, option)}
                                   className={`border rounded transition ${
                                     isSelected ? 'border-2 border-green-400' : 'border-gray-300'
                                   } ${attr.name.toLowerCase() === 'color' ? 'px-4 py-4' : 'p-1'}`}
@@ -86,7 +85,7 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
                                   data-testid={`cart-item-attribute-${attrName}-${optionValue}${isSelected ? '-selected' : ''}`}
                                 >
                                   {attr.name.toLowerCase() === 'color' ? '' : option}
-                                </button>
+                                </span>
                               );
                           })}
                         </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default function ProductCard({ product, addTocart }) {
+export default function ProductCard({ product, addTocart, openCart }) {
   const {
     id,
     name,
@@ -12,13 +12,19 @@ export default function ProductCard({ product, addTocart }) {
 
   const firstPic = gallery?.[0];
 
-  const newItem = {
-    name,
-    quantity: 1,
-    price,
-    image: gallery?.[0] ?? '',
-    attributes: product.attributes || [],
-    selectedAttributes: {}
+  const handleAddToCart = () => {
+
+    const cartItem = {
+      name: product.name,
+      quantity: 1,
+      price: product.price,
+      image: product.gallery?.[0] ?? '',
+      selectedAttributes: {},
+      attributes: product.attributes || [],
+    };
+
+    addTocart(cartItem);
+    openCart(); 
   };
 
   return (
@@ -43,7 +49,7 @@ export default function ProductCard({ product, addTocart }) {
         {in_stock && (
             <div
               className="absolute bottom-16 right-4 bg-green-500 p-2 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
-              onClick={() => addTocart(newItem)}
+              onClick={handleAddToCart}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

@@ -42,24 +42,6 @@ const useCart = () => {
   });
 };
 
-  const updateAttribute = (index, attrName, value) => {
-    setCartItems(prevItems => {
-      const updated = [...prevItems];
-      const item = updated[index];
-
-      updated[index] = {
-        ...item,
-        selectedAttributes: {
-          ...item.selectedAttributes,
-          [attrName]: value
-        }
-      };
-
-      return updated;
-    });
-  };
-
-
   const increaseQuantity = (index) => {
     const updated = [...cartItems];
     updated[index].quantity += 1;
@@ -86,8 +68,7 @@ const useCart = () => {
     addToCart,
     increaseQuantity,
     decreaseQuantity,
-    clearCart,
-    updateAttribute
+    clearCart
   };
 };
 

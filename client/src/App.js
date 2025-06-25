@@ -18,7 +18,6 @@ function App() {
     increaseQuantity,
     decreaseQuantity,
     clearCart,
-    updateAttribute
   } = useCart();
 
   return (
@@ -37,8 +36,6 @@ function App() {
         decreaseQuantity={decreaseQuantity}
         increaseQuantity={increaseQuantity}
         clearCart={clearCart}
-        updateAttribute={updateAttribute}
-
       />
 
       <main className="p-6">
@@ -49,7 +46,7 @@ function App() {
             element={
               <>
                 <h3 className="text-3xl text-gray-700 capitalize">{selectedCategory}</h3>
-                <ProductList category={selectedCategory} addTocart={addToCart} />
+                <ProductList category={selectedCategory} addTocart={addToCart} openCart={() => setCartOpen(true)} />
               </>
             }
           />

@@ -4,10 +4,11 @@ import parse from 'html-react-parser';
 import { useQuery } from '@apollo/client';
 import { GetProductById } from '../graphQl/queries';
 
-export default function SingleProduct({ addTocart, openCart  }) {
+export default function SingleProduct({ addTocart, openCart }) {
   const { id } = useParams();
   const [selectedAttributes, setSelectedAttributes] = useState({});
-  const [mainImage, setMainImage] = useState(null);
+  const [mainImageIndex, setMainImageIndex] = useState(0);
+  const [galleryScrollIndex, setGalleryScrollIndex] = useState(0);
 
   const { loading, error, data } = useQuery(GetProductById, {
     variables: { id },
@@ -18,7 +19,8 @@ export default function SingleProduct({ addTocart, openCart  }) {
 
   useEffect(() => {
     if (product?.gallery?.length) {
-      setMainImage(product.gallery[0]);
+      setMainImageIndex(0);
+      setGalleryScrollIndex(0);
     }
   }, [product]);
 
@@ -27,7 +29,6 @@ export default function SingleProduct({ addTocart, openCart  }) {
   };
 
   const handleAddToCart = () => {
-
     const cartItem = {
       name: product.name,
       price: product.price,
@@ -40,39 +41,79 @@ export default function SingleProduct({ addTocart, openCart  }) {
     };
 
     addTocart(cartItem);
-    openCart(); 
+    openCart();
     alert('Product added to cart!');
   };
 
   const allSelected = product?.attributes?.every(attr => selectedAttributes[attr.name]);
   const inStock = product?.in_stock;
-  const dis_btn = (allSelected && inStock)
+  const dis_btn = (allSelected && inStock);
 
+  const nextImage = () => {
+    if (product?.gallery?.length) {
+      setMainImageIndex((prev) => (prev + 1) % product.gallery.length);
+    }
+  };
 
+  const prevImage = () => {
+    if (product?.gallery?.length) {
+      setMainImageIndex((prev) => (prev - 1 + product.gallery.length) % product.gallery.length);
+    }
+  };
 
+  const scrollUp = () => {
+    setGalleryScrollIndex((prev) => Math.max(prev - 1, 0));
+  };
 
+  const scrollDown = () => {
+    setGalleryScrollIndex((prev) =>
+      Math.min(prev + 1, product.gallery.length - 4)
+    );
+  };
 
   if (loading) return <p className="p-4">Loading product...</p>;
   if (error || !product) return <p className="p-4 text-red-500">Product not found.</p>;
 
+  const visibleThumbnails = product.gallery.slice(galleryScrollIndex, galleryScrollIndex + 4);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-7 gap-8 p-6">
-      
-      <div className="flex flex-col gap-2" data-testid="product-gallery">
-        {product.gallery.map((img, idx) => (
+      <div className="flex flex-col items-center gap-2 " data-testid="product-gallery">
+        {product.gallery.length > 4 && (
+          <button onClick={scrollUp}> &#8743; </button>
+        )}
+        {visibleThumbnails.map((img, index) => (
           <img
-            key={idx}
+            key={index}
             src={img}
-            alt={`gallery-${idx}`}
-            onClick={() => setMainImage(img)}
-            className={`w-20 h-20 object-cover cursor-pointer border ${mainImage === img ? 'border-black' : ''}`}
+            alt={`gallery-${galleryScrollIndex + index}`}
+            onClick={() => setMainImageIndex(galleryScrollIndex + index)}
+            className={`w-20 h-20 object-cover cursor-pointer border ${product.gallery[mainImageIndex] === img ? 'border-black' : ''}`}
           />
         ))}
+        {product.gallery.length > 4 && (
+          <button onClick={scrollDown}>&#8744;</button>
+        )}
       </div>
 
-      <div className="col-span-3">
-        <img src={mainImage} alt="main" className="w-full max-h-[500px] object-contain" />
+      <div className="col-span-3 relative h-fit">
+        <img
+          src={product.gallery[mainImageIndex]}
+          alt="main"
+          className="w-full max-h-[500px] object-contain"
+        />
+        {product.gallery.length > 2 && (
+          <button
+            onClick={prevImage}
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-2 rounded"
+          >&#x3c;</button>
+        )}
+        {product.gallery.length > 2 && (
+          <button
+            onClick={nextImage}
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-2 rounded"
+          >&#x3e;</button>
+        )}
       </div>
 
       <div className="col-span-2">
@@ -105,7 +146,7 @@ export default function SingleProduct({ addTocart, openCart  }) {
 
         <div className="my-4">
           <h3 className="text-lg font-semibold">Price:</h3>
-          <p className="text-xl font-bold">${product.price.toFixed(2)}</p>
+          <p className="text-xl font-bold">${product.price?.toFixed(2)}</p>
         </div>
 
         <button

@@ -3,16 +3,16 @@ import { useQuery } from '@apollo/client';
 import { GET_PRODUCTS_BY_CATEGORY } from '../graphQl/queries';
 import ProductCard from './ProductCard';
 
-const ProductList = ({ category, addTocart }) => {
+const ProductList = ({ category, addTocart, openCart }) => {
   
   const { loading, error, data } = useQuery(GET_PRODUCTS_BY_CATEGORY, {
     variables: { category },
     skip: !category,
   });
 
-  if (!category) return <h3 className="p-4">Select a category</h3>;
   if (loading) return <p className="p-4">Loading products...</p>;
   if (error) {
+    console.error('Product query error:', error);
     return <p className="p-4 text-red-500">Error loading products</p>;
   }
 
@@ -25,7 +25,7 @@ const ProductList = ({ category, addTocart }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-4">
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} addTocart={addTocart} />
+        <ProductCard key={product.id} product={product} addTocart={addTocart} openCart={openCart} />
       ))}
     </div>
   );
