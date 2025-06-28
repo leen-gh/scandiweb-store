@@ -26,7 +26,7 @@ class ProductResolver
         return self::getRepository()->findByCategory($categoryId);
     }
 
-    public static function getProductById($id) // Now accepts string ID
+    public static function getProductById($id)
     {
         return self::getRepository()->findById($id);
     }
