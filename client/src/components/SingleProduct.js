@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import parse from 'html-react-parser';
 import { useQuery } from '@apollo/client';
 import { GetProductById } from '../graphQl/queries';
 
@@ -42,7 +41,6 @@ export default function SingleProduct({ addTocart, openCart }) {
 
     addTocart(cartItem);
     openCart();
-    alert('Product added to cart!');
   };
 
   const allSelected = product?.attributes?.every(attr => selectedAttributes[attr.name]);
@@ -105,23 +103,23 @@ export default function SingleProduct({ addTocart, openCart }) {
         {product.gallery.length > 2 && (
           <button
             onClick={prevImage}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-2 rounded"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-2 "
           >&#x3c;</button>
         )}
         {product.gallery.length > 2 && (
           <button
             onClick={nextImage}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-60 text-white p-2 rounded"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-70 text-white p-2 "
           >&#x3e;</button>
         )}
       </div>
 
       <div className="col-span-2">
-        <h1 className="text-2xl font-bold my-4">{product.name}</h1>
+        <h1 className="text-2xl font-semibold my-4">{product.name}</h1>
 
         {product.attributes?.map((attr) => (
           <div key={attr.name} className="mb-4" data-testid={`product-attribute-${attr.name.toLowerCase().replace(/\s+/g, '-')}`}>
-            <h2 className="font-semibold text-lg mb-2">{attr.name}</h2>
+            <h2 className="font-medium text-normal uppercase mb-2">{attr.name}:</h2>
             <div className="flex gap-2">
               {attr.options.map((option) => {
                 const isSelected = selectedAttributes[attr.name] === option;
@@ -131,8 +129,8 @@ export default function SingleProduct({ addTocart, openCart }) {
                     key={option}
                     onClick={() => handleAttributeSelect(attr.name, option)}
                     className={`border rounded cursor-pointer transition 
-                      ${isSelected ? 'bg-black text-white border-2 border-green-400' : 'bg-gray-100'}
-                      ${isColor ? 'px-4 py-4' : 'px-2 py-1'}`}
+                      ${isSelected ? 'bg-black text-white border-2 border-green-400' : 'bg-white text-black border-gray-300'}
+                      ${isColor ? 'px-4 py-4' : 'px-5 py-3'}`}
                     style={isColor ? { backgroundColor: option } : {}}
                     data-testid={`product-attribute-${attr.name.toLowerCase().replace(/\s+/g, '-')}-${option}`}
                   >
@@ -145,7 +143,7 @@ export default function SingleProduct({ addTocart, openCart }) {
         ))}
 
         <div className="my-4">
-          <h3 className="text-lg font-semibold">Price:</h3>
+          <h3 className="font-medium text-normal uppercase mb-2">Price:</h3>
           <p className="text-xl font-bold">${product.price?.toFixed(2)}</p>
         </div>
 
@@ -153,14 +151,16 @@ export default function SingleProduct({ addTocart, openCart }) {
           onClick={handleAddToCart}
           data-testid="add-to-cart"
           disabled={!dis_btn}
-          className="w-full px-6 py-3 bg-green-400 text-white rounded hover:bg-green-500 disabled:bg-gray-400 transition"
+          className="w-full px-6 py-3 bg-[#5ece7b] text-white hover:bg-green-500 disabled:bg-gray-400 transition uppercase"
         >
           Add to Cart
         </button>
 
-        <div className="mt-6 prose" data-testid="product-description">
-          {product.description ? parse(product.description) : 'No description.'}
-        </div>
+         <div 
+            className="mt-6 prose" 
+            data-testid="product-description"
+            dangerouslySetInnerHTML={{ __html: product.description || 'No description.' }}
+          />
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
       data-testid="cart-overlay"
       onClick={onClose}
       className={`
-      fixed inset-0 top-16 bg-black bg-opacity-50 flex justify-end z-50 overflow-y-auto
+      fixed inset-0 top-20 bg-black bg-opacity-30 flex justify-end z-50 overflow-y-auto
       transition-opacity duration-300 ease-in-out
       ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none hidden'}
       `}
@@ -48,14 +48,14 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
       <div
         onClick={(e) => e.stopPropagation()}
         className={`
-          bg-white w-96 h-fit p-6 relative overflow-y-auto
+          bg-white right-16  w-100 h-fit p-6 relative overflow-y-auto
           transform transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >
 
 
-        <h2 className="text-xl font-bold mb-4">My Bag: <span className="font-light text-lg">{cartItems.length} Items</span></h2>
+        <h2 className="text-base font-semibold mb-4">My Bag: <span className="font-normal text-base">{cartItems.length} Items</span></h2>
 
         {cartItems.length === 0 ? (
           <p>Your cart is empty.</p>
@@ -63,24 +63,24 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
           <ul className="space-y-6">
             {cartItems.map((item, index) => (
               <li key={index} className="flex gap-4 items-center justify-between">
-                <div className="p-4 border-b">
-                  <h3 className="text-grey-700 font-light">{item.name}</h3>
-                  <p className="text-base font-medium">${item.price}</p>
+                <div className="p-2 ">
+                  <h3 className="text-grey-700 font-light text-base mb-2">{item.name}</h3>
+                  <p className="text-base font-medium mb-2">${item.price}</p>
                   {item.attributes.map(attr => {
                     const attrName = attr.name.toLowerCase().replace(/\s+/g, '-');
                     return (
-                      <div key={attr.name} data-testid={`cart-item-attribute-${attrName}`}>
-                        <p className="text-sm font-medium">{attr.name}:</p>
-                        <div className="flex gap-2 mt-1">
+                      <div key={attr.name} className='mb-1' data-testid={`cart-item-attribute-${attrName}`}>
+                        <p className="text-sm font-medium mb-1">{attr.name}:</p>
+                        <div className="flex gap-2">
                           {attr.options.map((option, i) => {
                             const optionValue = option.toLowerCase().replace(/\s+/g, '-');
                             const isSelected = item.selectedAttributes[attr.name] === option;
                               return (
                                 <span
                                   key={option}
-                                  className={`border rounded transition ${
-                                    isSelected ? 'border-2 border-green-400' : 'border-gray-300'
-                                  } ${attr.name.toLowerCase() === 'color' ? 'px-4 py-4' : 'p-1'}`}
+                                  className={`border text-xs transition ${
+                                    isSelected ? 'bg-black text-white border-green-400 border-2' : 'bg-white text-black border-gray-300'
+                                  } ${attr.name.toLowerCase() === 'color' ? 'px-2 py-2' : 'p-1'}`}
                                   style={attr.name.toLowerCase() === 'color' ? { backgroundColor: option } : {}}
                                   data-testid={`cart-item-attribute-${attrName}-${optionValue}${isSelected ? '-selected' : ''}`}
                                 >
@@ -92,29 +92,34 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
                       </div>
                     );
                   })}
-                  <div className="flex items-center gap-2 mt-4">
+
+                </div>
+                <div className="flex gap-4 items-start">
+                  <div className="flex flex-col items-center justify-between h-32">
                     <button
                       onClick={() => increaseQuantity(index, item.quantity)}
                       data-testid="cart-item-amount-increase"
-                      className="px-2 py-1 border"
+                      className="w-6 h-6 border border-black flex items-center justify-center text-lg hover:bg-gray-100"
                     >
                       +
                     </button>
-                    <span data-testid="cart-item-amount">{item.quantity}</span>
+                    <span data-testid="cart-item-amount" className="text-base font-medium">
+                      {item.quantity}
+                    </span>
                     <button
                       onClick={() => decreaseQuantity(index, item.quantity)}
                       data-testid="cart-item-amount-decrease"
-                      className="px-2 py-1 border"
+                      className="w-6 h-6 border border-black flex items-center justify-center text-lg hover:bg-gray-100"
                     >
-                      -
+                      −
                     </button>
                   </div>
-                </div>
                 <img
                   src={item.image}
                   alt={item.name}
                   className="w-24 h-32 object-cover border"
                 />
+                </div>
               </li>
             ))}
           </ul>
@@ -129,8 +134,8 @@ export default function CartOverlay({ isOpen, onClose, cartItems, decreaseQuanti
               onClick={handlePlaceOrder}
               data-testid="place-order"
               disabled={cartItems.length === 0}
-              className={`mt-4 w-full text-white py-2 rounded transition ${
-                cartItems.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'
+              className={`mt-4 w-full text-white uppercase py-2 rounded transition ${
+                cartItems.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[#5ece7b] hover:bg-green-700'
               }`}
             >
               Place Order

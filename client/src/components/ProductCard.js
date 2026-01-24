@@ -7,20 +7,43 @@ export default function ProductCard({ product, addTocart, openCart }) {
     name,
     gallery,
     in_stock = true,
-    price = [{ currency: '$', amount: 50 }]
+    price = [{ currency: '$', amount: 50 }],
+    attributes = { 
+      name: [],
+      options: []}
   } = product;
 
   const firstPic = gallery?.[0];
 
   const handleAddToCart = () => {
 
+    const defaultSelectedAttributes = {};
+        
+    if (Array.isArray(product.attributes)) {
+      product.attributes.forEach(attribute => {
+        if (attribute.options && attribute.options.length > 0) {
+          defaultSelectedAttributes[attribute.name] = attribute.options[0];
+        }
+      });
+    } 
+    else if (attributes.options && attributes.options.length > 0) {
+      attributes.options.forEach(attribute => {
+        if (attribute.items && attribute.items.length > 0) {
+          defaultSelectedAttributes[attribute.name] = attribute.items[0].value;
+        } else if (attribute.options && attribute.options.length > 0) {
+          defaultSelectedAttributes[attribute.name] = attribute.options[0];
+        }
+      });
+    }
+    
+
     const cartItem = {
       name: product.name,
       quantity: 1,
       price: product.price,
       image: product.gallery?.[0] ?? '',
-      selectedAttributes: {},
-      attributes: product.attributes || [],
+      selectedAttributes: defaultSelectedAttributes,
+      attributes: product.attributes || { options: [] },
     };
 
     addTocart(cartItem);
@@ -48,7 +71,7 @@ export default function ProductCard({ product, addTocart, openCart }) {
       <div className="p-2">
         {in_stock && (
             <div
-              className="absolute bottom-16 right-4 bg-green-500 p-2 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
+              className="absolute bottom-16 right-4 bg-[#5ece7b] p-2 rounded-full opacity-0 group-hover:opacity-100 transition cursor-pointer"
               onClick={handleAddToCart}
             >
               <svg

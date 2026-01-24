@@ -45,7 +45,7 @@ function App() {
             path="/:category"
             element={
               <>
-                <h3 className="text-3xl text-gray-700 capitalize">{selectedCategory}</h3>
+                <h3 className="text-3xl text-gray-950 uppercase mb-20">{selectedCategory}</h3>
                 <ProductList category={selectedCategory} addTocart={addToCart} openCart={() => setCartOpen(true)} />
               </>
             }
