@@ -9,7 +9,6 @@ use GraphQL\Type\Schema;
 use GraphQL\Type\SchemaConfig;
 use RuntimeException;
 use Throwable;
-
 use App\GraphQL\Types\CategoryType;
 use App\GraphQL\Types\ProductType;
 use App\GraphQL\Resolvers\CategoryResolver;
@@ -18,14 +17,15 @@ use App\GraphQL\Resolvers\OrderResolver;
 use App\GraphQL\Types\OrderType;
 use App\GraphQL\Types\OrderItemInputType;
 
-
-class GraphQL {
-    static public function handle() {
+class GraphQL
+{
+    public static function handle()
+    {
         $categoryType = new CategoryType();
         $productType = new ProductType();
-        
+
         try {
-            
+
             $queryType = new ObjectType([
                 'name' => 'Query',
                 'fields' => [
@@ -43,7 +43,7 @@ class GraphQL {
                             'category' => Type::nonNull(Type::string()),
                         ],
                         'resolve' => fn ($root, $args) => ProductResolver::byCategoryId($args['category']),
-                    ],                    
+                    ],
                     'product' => [
                         'type' => $productType,
                         'args' => [
@@ -72,7 +72,7 @@ class GraphQL {
                     ]
                 ],
             ]);
-            
+
             $schema = new Schema(
                 (new SchemaConfig())
                 ->setQuery($queryType)
@@ -85,7 +85,7 @@ class GraphQL {
 
             $result = GraphQLBase::executeQuery($schema, $query, null, null, $variables);
             $output = $result->toArray();
-            
+
         } catch (Throwable $e) {
             http_response_code(500);
             header('Content-Type: application/json; charset=UTF-8');
@@ -99,7 +99,7 @@ class GraphQL {
             ]);
             exit;
         }
-        
+
 
         header('Content-Type: application/json; charset=UTF-8');
         return json_encode($output);

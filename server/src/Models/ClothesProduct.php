@@ -6,6 +6,6 @@ class ClothesProduct extends AbstractProduct
 {
     protected function getSpecificAttributes(): array
     {
-        return []; 
+        return [];
     }
 }

@@ -1,11 +1,14 @@
 <?php
+
 namespace App\GraphQL\Resolvers;
 
 use App\Database;
 
-class OrderResolver {
-    public static function place($args) {
-        $pdo = Database::connect(); 
+class OrderResolver
+{
+    public static function place($args)
+    {
+        $pdo = Database::connect();
 
         $items = json_encode($args['items']);
         $total = $args['totalPrice'];

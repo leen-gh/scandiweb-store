@@ -90,5 +90,7 @@ abstract class AbstractProduct
             'gallery' => $this->gallery,
             'attributes' => $this->attributes
         ];
+
+
     }
 }

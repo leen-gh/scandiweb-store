@@ -11,7 +11,7 @@ import App from './App';
 
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost/sweb-backend/public/graphql',
+  uri: 'http://localhost/servertest/public/graphql',
   headers: {
     'Content-Type': 'application/json',
   },

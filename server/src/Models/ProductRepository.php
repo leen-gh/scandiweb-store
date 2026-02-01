@@ -1,8 +1,8 @@
 <?php
+
 namespace App\Models;
 
 use App\Database;
-
 
 class ProductRepository
 {
@@ -18,22 +18,22 @@ class ProductRepository
         try {
             $stmt = $this->pdo->query("SELECT * FROM products");
             $productsData = $stmt->fetchAll(\PDO::FETCH_ASSOC);
-            
+
             $products = [];
             foreach ($productsData as $productData) {
-                
+
                 $product = ProductFactory::create($productData);
                 $product->loadRelations();
                 $products[] = $product->toArray();
             }
-            
+
             return $products;
         } catch (\Throwable $e) {
             return [['id' => 0, 'name' => 'DB Error: ' . $e->getMessage()]];
         }
     }
 
-    public function findById($id): ?array 
+    public function findById($id): ?array
     {
         try {
 
@@ -41,12 +41,14 @@ class ProductRepository
             $stmt->execute([$id]);
             $productData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if (!$productData) return null;
+            if (!$productData) {
+                return null;
+            }
 
 
             $product = ProductFactory::create($productData);
             $product->loadRelations();
-            
+
             return $product->toArray();
         } catch (\Throwable $e) {
             return ['error' => $e->getMessage()];

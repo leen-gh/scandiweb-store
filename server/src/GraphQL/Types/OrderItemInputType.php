@@ -1,11 +1,14 @@
 <?php
+
 namespace App\GraphQL\Types;
 
 use GraphQL\Type\Definition\InputObjectType;
 use GraphQL\Type\Definition\Type;
 
-class OrderItemInputType extends InputObjectType {
-    public function __construct() {
+class OrderItemInputType extends InputObjectType
+{
+    public function __construct()
+    {
         parent::__construct([
             'name' => 'OrderItemInput',
             'fields' => [

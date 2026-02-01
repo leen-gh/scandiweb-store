@@ -26,7 +26,7 @@ class ProductType extends ObjectType
                         'name' => Type::string(),
                         'options' => Type::listOf(Type::string())
                     ]
-                ])),               
+                ])),
 
             ]
         ]);
