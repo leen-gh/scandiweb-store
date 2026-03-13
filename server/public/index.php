@@ -1,4 +1,5 @@
 <?php
+
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
 header("Access-Control-Allow-Credentials: true");
@@ -15,7 +16,7 @@ $scriptName = dirname($_SERVER['SCRIPT_NAME']);
 $path = '/' . trim(str_replace($scriptName, '', $uri), '/');
 $path = parse_url($path, PHP_URL_PATH);
 
-$dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
+$dispatcher = FastRoute\simpleDispatcher(function (FastRoute\RouteCollector $r) {
     $r->post('/graphql', [App\Controller\GraphQL::class, 'handle']);
 });
 

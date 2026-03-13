@@ -4,8 +4,10 @@ namespace App;
 
 use PDO;
 
-class Database {
-    public static function connect(): PDO {
+class Database
+{
+    public static function connect(): PDO
+    {
         $host = 'localhost';
         $db   = 'sweb-ecommerce';
         $user = 'root';
