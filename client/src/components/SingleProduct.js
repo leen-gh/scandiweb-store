@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
 import { GetProductById } from '../graphQl/queries';
+import parse from 'html-react-parser';
 
 export default function SingleProduct({ addTocart, openCart }) {
   const { id } = useParams();
@@ -156,11 +157,12 @@ export default function SingleProduct({ addTocart, openCart }) {
           Add to Cart
         </button>
 
-         <div 
-            className="mt-6 prose" 
-            data-testid="product-description"
-            dangerouslySetInnerHTML={{ __html: product.description || 'No description.' }}
-          />
+        <div 
+          className="mt-6 prose" 
+          data-testid="product-description"
+        >
+          {parse(product.description || 'No description.')}
+        </div>
       </div>
     </div>
   );
