@@ -11,7 +11,7 @@ import App from './App';
 
 
 const httpLink = new HttpLink({
-  uri: 'http://localhost/servertest/public/graphql',
+  uri: 'https://scandiweb-store.great-site.net/sweb-backend/public/graphql',
   headers: {
     'Content-Type': 'application/json',
   },
